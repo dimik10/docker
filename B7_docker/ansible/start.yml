@@ -1,17 +1,9 @@
 ---
-- hosts: app
-  become: true
-  vars:
-    ansible_python_interpreter: /usr/bin/python3
-  roles:
-    - role: docker
-      tags: docker
-
 - hosts: database
   become: true
   vars:
     ansible_python_interpreter: /usr/bin/python3
   roles:
-#    - role: postgresql
-#      tags: postgresql
+    - role: postgresql
+      tags: postgresql
     - role: docker
