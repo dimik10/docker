@@ -1,0 +1,53 @@
+---
+- name: Run apt upgrade
+  apt:
+    upgrade: yes
+    update_cache: yes
+
+
+- name: Install acl packages to start postgresql unpriv user
+  apt:
+    package: acl
+    state: latest
+
+- name: Install packages
+  apt:
+    package: "{{ item  }}"
+    state: latest
+  with_items:
+    - postgresql
+
+- name: Start and enable service
+  ansible.builtin.service:
+    name: postgresql
+    state: started
+    enabled: true
+
+- name: Install python3-pip
+  apt:
+    package:
+      - python3-pip
+      - python3-dev
+      - libpq-dev
+      - mc
+    state: latest
+
+- name: Install psycopg2 python package
+  ansible.builtin.pip:
+    name: psycopg2
+
+- name: Create a new database with name "project"
+  community.postgresql.postgresql_db:
+    name: project
+    state: present
+  become_user: postgres
+  become: true
+
+- name: Connect to project database, create test user, and grant access to database and products table
+  tags: start
+  community.postgresql.postgresql_user:
+    db: project
+    name: test
+    password: test_user
+    priv: "CONNECT/ALL"
+

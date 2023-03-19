@@ -1,0 +1,11 @@
+all:
+  children:
+    database:
+      hosts:
+        vm1:
+          ansible_host: 158.160.26.110
+          ansible_ssh_user: ubuntu
+      vars:
+        postgresql_version: "12"
+        postgresql_bin_path: "/usr/lib/postgresql/{{ postgresql_version }}/bin"
+        postgresql_data_dir: "/var/lib/postgresql/{{ postgresql_version }}/main"

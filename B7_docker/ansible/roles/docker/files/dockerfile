@@ -1,0 +1,10 @@
+FROM python:3.8.3-slim
+WORKDIR /opt
+# install packages
+RUN apt-get update \
+    && apt-get -y install libpq-dev gcc \
+    && pip3 install psycopg2 configparser flask
+
+RUN cd /srv/app
+
+CMD bash

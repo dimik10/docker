@@ -1,0 +1,7 @@
+- name: Install packages on Ubuntu host
+  ansible.builtin.include: ub.yml
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: Install packages on CentOS host
+  ansible.builtin.include: centos.yml
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'

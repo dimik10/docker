@@ -1,0 +1,81 @@
+- name: Install required system packages
+  apt:
+    pkg:
+      - aptitude
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - software-properties-common
+      - python3-pip
+      - virtualenv
+      - python3-setuptools
+    state: latest
+    update_cache: true
+
+- name: Add Docker GPG apt Key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: Add Docker Repository
+  apt_repository:
+    repo: deb https://download.docker.com/linux/ubuntu focal stable
+    state: present
+
+- name: Update apt and install docker-ce
+  apt:
+    name: docker-ce
+    state: latest
+    update_cache: true
+
+- name: Install Docker Module for Python
+  pip:
+    name: docker
+
+- name: copy Dockerfile
+  copy:
+    src: files/dockerfile
+    dest: /tmp/dockerfile
+
+- name: Creates directory
+  file:
+    path: /srv/app/conf
+    state: directory
+
+- name: copy web.conf
+  copy:
+    src: files/web.conf
+    dest: /srv/app/conf/web.conf
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: copy web.py
+  copy:
+    src: files/web.py
+    dest: /srv/app/web.py
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Pull default Docker image
+  community.docker.docker_image:
+    name: python:3.8.3-slim
+    source: pull
+
+- name: build container image
+  docker_image:
+    name: python_project
+    source: build
+    build:
+      path: /tmp/
+
+
+- name: Create a data container
+  tags: d
+  community.docker.docker_container:
+    name: start_py_script1
+    image: python_project
+    command: python3 /srv/app/web.py
+    volumes:
+      - /srv/app:/srv/app
