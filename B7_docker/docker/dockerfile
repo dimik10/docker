@@ -5,6 +5,4 @@ RUN apt-get update \
     && apt-get -y install libpq-dev gcc \
     && pip3 install psycopg2 configparser flask
 
-RUN cd /srv/app
-
-CMD bash
+CMD python3 /srv/app/web.py
