@@ -1,0 +1,2 @@
+docker build . -t p_down_fav
+docker run -it p_down_fav ./download.sh ya.ru

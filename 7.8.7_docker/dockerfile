@@ -1,0 +1,18 @@
+
+FROM alpine:3.14
+WORKDIR /opt
+# install packages
+RUN apk update && apk add --no-cache \
+    bash \
+    bc \
+    net-tools \
+    openssh openssh-server \
+    openssl \
+    wget \
+    ;
+
+COPY download.sh .
+
+RUN cd /opt
+
+CMD bash
