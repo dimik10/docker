@@ -70,7 +70,6 @@
     build:
       path: /tmp/
 
-
 - name: Create a data container
   tags: d
   community.docker.docker_container:
@@ -79,3 +78,6 @@
     command: python3 /srv/app/web.py
     volumes:
       - /srv/app:/srv/app
+    ports:
+     - "80:80"
+
